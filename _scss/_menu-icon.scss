@@ -1,0 +1,92 @@
+$scale: 1.414213562; // sqrt(1^2+1^2) - sqrt(100%^2+100%^2) - a^2+b^2=c^2
+$inset: 0%;
+$path-height-perc: 10%;
+
+$left: $inset + $path-height-perc;
+$elem-width: (100% - $left*2)/2*$scale;
+
+// TODO: set transition to only the needed properties
+
+%el-base--menu-icon{
+	display: inline-block;
+	position: relative;
+}
+%el-base--menu-icon_path{
+	background: currentColor;
+	position: absolute;
+	width: $elem-width; 							// a & c
+	transform-origin: left center; 					// a & b
+	top: (100% - $inset - $path-height-perc * 1.5); // b & c
+	left: $left;
+}
+%el-base--menu-icon_path--a{
+	top: $inset + $path-height-perc/2;
+}
+%el-base--menu-icon_path--b{
+	width: 100%-$left*2;
+}
+%el-base--menu-icon_path--c{
+	transform-origin: right center;
+}
+
+@mixin el-menu-icon($width, $duration: .3s, $delay: 0s){
+	$path-height: $width/100%*$path-height-perc;
+
+	.menu-icon{
+		width: $width;
+		height: $width;
+		transition: $duration all $delay;
+		&_path{
+			height: $path-height;
+			border-radius: $path-height/2;
+			transition: $duration transform cubic-bezier(0,0,.4,1.2) $delay,
+						$duration height $delay;
+			&.path--b{
+				// original position: 100% - $height / 2
+				transform: translateY($width * -(100%-$left*2)/2/100%);
+			}
+		}
+	}
+	@at-root .menu-icon{
+		@extend %el-base--menu-icon;
+		&_path{
+			@extend %el-base--menu-icon_path;
+			&.path--a{
+				@extend %el-base--menu-icon_path--a;
+			}
+			&.path--b{
+				@extend %el-base--menu-icon_path--b;
+			}
+			&.path--c{
+				@extend %el-base--menu-icon_path--c;
+			}
+		}
+	}
+}
+
+@mixin el-menu-icon--hover($width, $duration, $delay){
+	.menu-icon{
+		$path-height: $width/100%*$path-height-perc;
+
+		width: $width;
+		height: $width;
+		transition: $duration all $delay;
+		&_path{
+			height: $path-height;
+			border-radius: $path-height/2;
+			transition: $duration transform cubic-bezier(0,0,.4,1.2) $delay,
+						$duration height $delay;
+			&.path--a{
+				transform: 	rotate(45deg);
+			}
+			&.path--b{
+				transform: 	rotate(-45deg) scaleX($scale);
+			}
+			&.path--c{
+				// 100% - $offset*2 - $elem-width
+				transform: 	translateX($width * (100% - $elem-width - $left*2)/100%)
+							rotate(45deg);
+			}
+		}
+	}
+}

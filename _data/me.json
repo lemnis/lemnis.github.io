@@ -1,0 +1,27 @@
+{
+	"fn": "Lisa Martens",
+	"n": {
+		"given-name": "Lisa",
+		"family-name": "Martens"
+	},
+	"title": "Front-End Developer",
+	"nickname": "lemnis",
+	"photo": {
+		"mediatype": "image/jpeg",
+		"value": "https://gravatar.com/avatar/654a1c1e76e0a86689b2c7b8ca911996"
+	},
+	"url": "https://lemnis.github.io/",
+	"email": [{
+		"type": "internet",
+		"value": "lemnis.martens@gmail.com"
+	}],
+	"adr": {
+		"locality": "Eindhoven",
+		"country-name": "The Netherlands"
+	},
+	"bday": "1993-03-06",
+	"X-SOCIALPROFILE": [{
+		"type": "twitter",
+		"value": "http://twitter.com/lisa_ink"
+	}]
+}

@@ -1,0 +1,46 @@
+// $context: of 10;
+
+.why {
+	background: left top / cover;
+	background-color: $color-blue;
+	background-color: #061d33;
+	background-image: url(inline-svg("./../_includes/why.svg"));
+	color: $color-white;
+	width: auto;
+	margin: 0;
+	padding: row(4) span(1 wider);
+	overflow: auto;
+	&_text {
+		float: left;
+		width: span(6 of 10 narrow);
+	}
+	h2 {
+		font-weight: 400;
+	}
+	p {
+		font-weight: 100;
+		$font-size: rem(22px);
+		font-size: $font-size;
+		line-height: line-height($font-size);
+		padding-top: top($font-size);
+		padding-bottom: bottom($font-size);
+	}
+	svg {
+		width: span(3 of 10 narrow);
+		margin-left: span(1 wider of 10 narrow);
+		height: auto;
+	}
+	@include bp($small) {
+		padding: row() gutter($small) row() * 3;
+		&_text {
+			width: auto;
+		}
+		p {
+			margin-left: 0;
+			width: auto;
+		}
+		svg {
+			display: none;
+		}
+	};
+}

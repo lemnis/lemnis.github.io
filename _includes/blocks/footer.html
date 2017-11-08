@@ -1,0 +1,52 @@
+<footer class="vcard">
+	<div class="vcard__link__list">
+		<a class="vcard__link_with-text" href="/LisaMartens.vcf">
+			Download vCard
+			{% include icons/download.svg %}
+		</a>
+		<a href="//twitter.com/lisa_ink" target="_BLANK">
+			{% include icons/twitter.svg %}
+		</a>
+		<a href="//github.io/lemnis/lemnis.github.io" target="_BLANK">
+			{% include icons/github.svg %}
+		</a>
+	</div>
+	<h2 class="fn">Lisa Martens</h2>
+	<picture>
+		<img class="photo" src="http://gravatar.com/avatar/654a1c1e76e0a86689b2c7b8ca911996?s=300"/>
+	</picture><!--
+	--><dl>
+	  <dt class="icon icon_bed">Verblijfplaats</dt>
+	  <dd>Eindhoven</dd>
+		<dt class="icon icon_unicycle">Vervoer</dt>
+		<dd>Eenwieler</dd>
+	  <dt class="icon icon_leaf">Obsessie</dt>
+	  <dd>Milieu</dd>
+		<dt class="icon icon_hourglass">Laadtijd</dt>
+		<dd>10 sec.</dd>
+	</dl>
+	<a hidden class="email" href="mailto:sally@example.com">e</a>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type" : "Person",
+  "name" : "Lisa Martens",
+	"givenName": "Lisa",
+	"familyName": "Martens",
+  "image" : "http://gravatar.com/avatar/654a1c1e76e0a86689b2c7b8ca911996",
+  "jobTitle": "Front-End Developer",
+  "birthDate": "1993-03-06",
+	"address" : {
+		"@type" : "PostalAddress",
+		"addressLocality" : "Eindhoven",
+		"addressCountry" : "NL"
+	},
+  "email" : "lemnis.martens@gmail.com",
+	"sameAs": [
+    "https://twitter.com/lisa_ink",
+    "https://www.linkedin.com/in/lemnis/"
+  ]
+}
+</script>

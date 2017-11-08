@@ -1,0 +1,135 @@
+.how {
+	margin: 0;
+	width: 100%;
+	overflow: auto;
+	svg {
+		@include base-aspect-ratio(1, 25%, (from: 3, until: 6));
+	}
+	h2 {
+		margin-left: span(1 wider);
+		color: $color-green;
+		@include bp($small) {
+			margin-left: 0;
+		}
+	}
+	ul {
+		display: flex;
+		@include bp($small) {
+			display: block;
+		};
+	}
+	li {
+		list-style: none;
+	}
+}
+
+.feature {
+	//sass-lint:disable-block no-duplicate-properties
+	$font-size: rem(26px);
+	font-size: $font-size;
+	font-size: responsive-text(
+		$min: rem(16px), $max: $font-size,
+		$min-width: em-to-rem(map-get($small, "max-width")),
+		$max-width: em-to-rem(map-get($susy, "design-width"))
+	);
+	color: $color-white;
+	font-weight: 100;
+	float: left;
+	width: span(4 narrow);
+	padding: 	row(2) gutter() / 2;
+
+	b, strong {
+		font-weight: 400;
+	}
+	&:first-child {
+		padding-left: gutter();
+	}
+	&:last-child {
+		padding-right: gutter();
+	}
+
+	svg, span {
+		vertical-align: middle;
+	}
+
+	svg {
+		@include base-aspect-ratio(
+			$aspect: 200 / 128, $perc: span(2),
+			$config: (aspect: (from: em-to-rem(map-get($small, "max-width")), until: 8))
+		);
+		width: span(2 of 4 narrow);
+		margin-right: gutter(of 4 narrow);
+	}
+	span {
+		$line-height: line-height($font-size);
+		display: inline-block;
+		width: span(2 of 4 narrow);
+		line-height: $line-height;
+		padding: top(static, (line-height: $line-height))
+						 0
+						 bottom(static, (line-height: $line-height));
+	}
+
+	&_speed {
+		background: $color-green-dark;
+	}
+	&_a11y {
+		background: $color-green;
+	}
+	&_indepedent {
+		background: $color-green-light;
+	}
+
+	@include bp($small) {
+		// sass-lint:disable-block no-duplicate-properties
+		$font-size: rem(15px);
+		font-size: $font-size;
+		font-size: responsive-text(
+			$min: $font-size, $max: rem(30px),
+			$min-width: em-to-rem(map-get($small, "design-width")),
+			$max-width: em-to-rem(map-get($small, "max-width"))
+		);
+
+		width: auto; // reset desktop
+		float: none; // reset desktop
+		padding: row() gutter($small);
+		box-sizing: border-box;
+
+		// progressive enhancement
+		display: flex;
+		align-items: center;
+
+		// override desktop
+		&:first-child {
+			padding-left: gutter($small);
+		}
+
+		svg, span {
+			display: inline-block;
+		}
+		svg {
+			@include base-aspect-ratio($aspect: 1, $perc: span(1, $small),
+				$config: ( aspect: ( until: em-to-rem(map-get($small, "max-width")) ) )
+			);
+			box-sizing: border-box;
+			width: span(1 of narrow, $small);
+			height: 100%;
+			margin-left: 0;
+			margin-right: gutter(of narrow, $small);
+		}
+		span {
+			width: span(3 of narrow, $small);
+			line-height: line-height($font-size);
+			padding: top(static, (line-height: line-height($font-size))) 0;
+		}
+
+		// change icon order on the even elements
+		&:nth-child(even) {
+			svg {
+				order: 2;
+				margin-left: gutter(of narrow, $small);
+				margin-right: 0;
+			}
+		}
+	}
+}

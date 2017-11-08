@@ -1,0 +1,29 @@
+<input type="checkbox" id="toggle-menu" hidden>
+<header>
+	<label id="menu-button" tabindex="0" role="button" aria-haspopup="true"
+		for="toggle-menu" class="header_menu-button" aria-controls="menu">
+		Menu
+		<div class="header_menu-icon menu-icon" role="img">
+			<div class="menu-icon_path path--a"></div>
+			<div class="menu-icon_path path--b"></div>
+			<div class="menu-icon_path path--c"></div>
+		</div>
+	</label>
+	<nav id="menu" aria-labelledby="menu-button">
+		<ul role="menu">
+			<li role="none">
+				<a href="#" role="menuitem">
+					<!-- todo: set svg as presentation element, but preserve pronunciation -->
+					<svg role="presentation">
+						<use xlink:href="#home">
+							<title>Home</title>
+						</use>
+					</svg>
+				</a>
+			</li>
+			<li role="none"><a href="#" role="menuitem">Projects</a></li>
+			<li role="none"><a href="#" role="menuitem">Blog</a></li>
+			<li role="none"><a href="#" role="menuitem">Travel</a></li>
+		</ul>
+	</nav>
+</header>

@@ -1,0 +1,285 @@
+@import "susy";
+@import "susy/plugins/svg-grid";
+@import "sassy-inline-svg";
+@import "../../../baseline/scss/base";
+@import "font";
+
+// ******** FUNCTION HELPERS ********
+
+//*
+///  Based on https://www.rucksackcss.org/docs/#responsive-type`
+///  @param {Number} $min       Minimal font-size
+///  @param {Number} $max       Maximum font-size
+///  @param {Number} $min-width Minimal width
+///  @param {Number} $max-width Width when showing maximum font-size
+///  @return {Number}
+@function responsive-text($min, $max, $min-width, $max-width) {
+	// min + (min - max) * ((100vw - min-width) / (max-width - min-width))
+	// calc(12px + 9 * ( (100vw - 420px) / 860))
+	@return calc(#{$min} + #{strip-unit($max - $min)} * ( (100vw - #{$min-width}) / #{strip-unit($max-width - $min-width)}));
+}
+
+//*
+/// Wrapper for the calc() function cleans up its content
+/// * remove quotes to allow operators in lists
+/// @param  {list} $items   list of operators, numbers and calc() strings
+/// @return {string}        calc() string
+@function calc-ext($items) {
+	// loop through list and cleanup items
+	@for $i from 1 through length($items) {
+		$item: nth($items, $i);
+
+		@if type-of($item) == "string" {
+			// remove calc from string if exists, to allow better browser support
+			@if str-index($item, "calc") == 1 {
+				$item: str-slice($item, 5);
+			}
+			// remove possible quotes, needed for allow math operator to be added to a list
+			$items: set-nth($items, $i, unquote($item));
+		}
+	}
+
+	@return calc(#{$items});
+}
+
+@function strip-unit($length) {
+	@return $length / ($length * 0 + 1);
+}
+
+@mixin bp($width) {
+	$width: if(type-of($width) == "number", $width, map-get($width, "max-width"));
+	@media (max-width: $width) {
+		@content;
+	}
+}
+
+$base-font-size: 16px;
+@function rem($size) {
+	@return $size / $base-font-size * 1rem;
+}
+
+@function em($size, $font-size: $base-font-size) {
+	@return $size / $font-size * 1em;
+}
+
+@function em-to-rem($size) {
+	@return $size / 1em * 1rem;
+}
+
+// **** END OF FUNCTION HELPERS ****
+
+$base: (
+	font-size: 1rem,
+	row-height: 1,
+	cap-height: .83,
+	min-line-height: 1.2
+);
+
+$susy: (
+	columns: susy-repeat(12),
+	gutters: .5,
+	container-spread: wider,
+	design-width: em(1480px)
+);
+$small: (
+	columns: susy-repeat(4),
+	gutters: 20 / 55,
+	container-spread: wider,
+	max-width: em(760px),
+	design-width: em(320px)
+);
+
+$color-white: #FAFAFA;
+$color-red: #AA0000;
+$color-black: #545454;
+$color-green-dark: #0F2E1C;;
+$color-green: #18472C;
+$color-green-light: #20603C;
+$color-blue: #0F4880;
+
+// with - tools
+$color-blue: #1564B3;
+$color-orange: #CC3D19;
+$color-pink: #C24282;
+$color-red: #DA1B1B;
+
+$color-red-transparent: rgba($color-red, .7);
+
+// cheap reset
+* {
+	margin: 0;
+	padding: 0;
+}
+
+head {
+	display: block;
+	position: fixed;
+	bottom: .2rem;
+	right: .2rem;
+	font-size: 3rem;
+	z-index: 2;
+	&::before {
+		content: "\2261";
+	}
+	&:hover, &:focus {
+		z-index: 1;
+		pointer-events: all;
+		~ body {
+			position: relative;
+			&::after {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				// height: 499%;
+				bottom: 0;
+				pointer-events: none;
+				background-image: susy-svg-grid(), base-debug-image();
+				@include bp($small) {
+					background: susy-svg-grid($small), base-debug-image();
+				}
+			}
+		}
+	}
+}
+
+body {
+	font-family: "Segoe UI";
+	background-color: $color-white;
+	color: $color-black;
+}
+
+svg {
+	// fill: currentColor;
+	width: 1em;
+	height: 1em;
+}
+
+// hidden attr fix for at least svgs
+[hidden] { display: none; }
+
+.hide {
+	@media (min-width: map-get($small, "max-width")) {
+		&_desktop {
+			display: none;
+		}
+	}
+	@include bp($small) {
+		&_mobile {
+			display: none;
+		}
+	}
+}
+
+@import "header";
+@import "why";
+@import "how";
+@import "with";
+@import "footer";
+
+main {
+	transition: transform .2s linear;
+}
+
+section {
+	width: span(10);
+	margin: 0 span(1 wider);
+
+	@include bp($small) {
+		width: auto;
+		margin: 0 gutter($small);
+	}
+}
+
+h1 {
+	margin: 0;
+	font-weight: 200;
+	display: inline-block;
+
+	$font-size: rem(72px);
+	font-size: $font-size;
+	line-height: line-height($font-size);
+	margin-top: top($font-size);
+	margin-bottom: bottom($font-size);
+
+	span {
+		color: $color-red;
+		font-weight: 400;
+	}
+
+	// adjusting text-size to keep intro text some what on 3 lines
+
+	@include bp(map-get($susy, "design-width")) {
+		$font-size: rem(56px);
+		font-size: $font-size;
+		line-height: line-height($font-size);
+		margin-top: top($font-size);
+		margin-bottom: bottom($font-size);
+	}
+
+	@media (max-width: rem(1110px)) {
+		$font-size: rem(40px);
+		font-size: $font-size;
+		line-height: line-height($font-size);
+		margin-top: top($font-size);
+		margin-bottom: bottom($font-size);
+	}
+
+	@include bp($small) {
+		$font-size: rem(24px);
+		font-size: $font-size;
+		line-height: line-height($font-size);
+		margin-top: top($font-size);
+		margin-bottom: bottom($font-size);
+	}
+}
+
+.intro {
+	h1 {
+		padding-top: row(8);
+		padding-bottom: row(8);
+
+		@include bp(map-get($susy, "design-width")) {
+			padding-top: row(5);
+			padding-bottom: row(5);
+		}
+
+		@include bp($small) {
+			padding-top: row(2);
+			padding-bottom: row(2);
+		}
+	}
+}
+
+h2 {
+	$font-size: rem(90px);
+	font-size: $font-size;
+	line-height: line-height($font-size);
+	padding-top: top($font-size);
+	padding-bottom: bottom($font-size);
+
+	@media (max-width: 1380px) {
+		$font-size: rem(54px);
+		font-size: $font-size;
+		line-height: line-height($font-size);
+		padding-top: top($font-size);
+		padding-bottom: bottom($font-size);
+	}
+	// @media (max-width: 1070px){
+	//     $config: _base-settings((font-size: rem(56px), add-rows-to-line-height: 0));
+	//     font-size       : base(font-size, $config);
+	//     line-height     : base(line-height, $config);
+	//     margin-top      : base(top, $config); // + row(5, $config);
+	//     margin-bottom   : base(bottom, $config); // + row(5, $config);
+	// }
+	@include bp($small) {
+		text-align: center;
+
+		$font-size: rem(30px);
+		font-size: $font-size;
+		line-height: line-height($font-size);
+		padding-top: top($font-size);
+		padding-bottom: bottom($font-size);
+	}
+}

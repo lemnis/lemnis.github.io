@@ -1,0 +1,260 @@
+$color-footer-grey: #E8E8E8;
+
+@mixin text-on-baseline($size, $design-width) {
+	$font-size: 100vw / strip-unit($design-width) * strip-unit(em($size));
+	$config: (
+		root-font-size: 100vw / strip-unit($design-width),
+		min-line-height: map-get($base, "cap-height")
+	);
+	font-size: $font-size;
+	line-height: line-height($font-size, $config);
+	padding-top: top($font-size, $config);
+}
+
+.vcard {
+	padding: 0 gutter() row(3);
+	background-color: $color-footer-grey;
+	background-image: radial-gradient(50% 4% at center top, change-color($color-black, $alpha: .1), change-color($color-black, $alpha: .1)),
+										linear-gradient(change-color($color-black, $alpha: .1), change-color($color-black, $alpha: 0) 8%);
+
+	@include bp($small) {
+		padding: 0 gutter($small) row();
+	}
+
+	&::after {
+		content: "";
+		clear: both;
+		display: block;
+	}
+
+	picture, dl {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	h2, picture {
+		margin-left: span(1 wide of narrow);
+	}
+
+	// ************* LINKS *************
+	$font-size: rem(13px);
+	&__link__list {
+		float: right;
+		font-size: $font-size;
+		line-height: line-height($font-size);
+		padding: row() + top($font-size) 0 bottom($font-size);
+		a {
+			border-radius: 99em;
+			color: inherit;
+			display: inline-block;
+			text-decoration: none;
+			transition: .3s border, .3s box-shadow;
+			&:hover {
+				box-shadow: 0 rem(2px) rem(10px) change-color($color-black, $alpha: .2),
+										inset 0 0 0 rem(1px) adjust-color($color-black, $lightness: 20%);
+			}
+		}
+
+		@include bp($small) {
+			float: none;
+			text-align: right;
+		}
+	}
+
+	&__link_with-text {
+		svg {
+			margin-left: top($font-size) / 2;
+		}
+	}
+	// ********* END OF LINKS **********
+
+	// ************* TITLES *************
+	h2 {
+		$font-size: rem(44px);
+		font-size: $font-size;
+		line-height: line-height($font-size);
+		padding-top: top($font-size) + row();
+		padding-bottom: bottom($font-size) + row(3);
+
+		@media (max-width: (map-get($susy, "design-width"))) { // 1480px
+			padding-bottom: bottom($font-size) + row(2);
+		}
+
+		@include bp($small) {
+			margin-left: 0;
+			$font-size: rem(24px);
+			font-size: $font-size;
+			line-height: line-height($font-size);
+			padding: top($font-size) 0 bottom($font-size);
+		}
+	}
+	// ********* END OF TITLES **********
+
+	// ********* PROFILE PICTURE *********
+	picture {
+		@include base-aspect-ratio($aspect: 1, $perc: span(2 of narrow),
+			$config: (aspect: (until: em-to-rem(map-get($susy, "design-width"))))
+		);
+
+		position: relative;
+		width: span(2 of narrow);
+		margin-right: span(1 wider of narrow);
+
+		// make box-shadow relative to it's width
+		font-size: 100vw / strip-unit(map-get($susy, "design-width"));
+
+		img {
+			border-radius: rem(99999px);
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			max-width: 100%;
+			max-height: 100%;
+			transform: translate(-50%, -50%);
+			box-shadow: 0 em(6px) em(14px) em(2px) change-color($color-black, $alpha: .3),
+									0 0 em(20px) em(5px) change-color($color-black, $alpha: .1);
+		}
+		@include bp($small) {
+			@include base-aspect-ratio(1, span(1 of narrow, $small),
+				$config: (aspect: (until: em-to-rem(map-get($small, "max-width"))))
+			);
+			width: span(1 of narrow, $small);
+			margin: 0 span(1 of narrow, $small) / 2 * 3 + gutter(of narrow, $small) / 2 * 3 row();
+		};
+	}
+	// ****** END OF PROFILE PICTURE *****
+
+	// ************ INFO LIST ************
+	dl {
+		color: $color-black;
+		width: span(8 of narrow);
+
+		display: inline-grid;
+		grid-template-columns: repeat(2, span(4 of 8 narrow));
+		grid-template-rows: repeat(2, row(2) row(3));
+		grid-gap: row() gutter(of 8 narrow);
+
+		@media (max-width: (map-get($susy, "design-width"))) { // 1480px
+			grid-template-rows: repeat(2, row(1) row(2));
+		}
+
+		@include bp($small) {// 760px
+			width: span(4 of narrow, $small);
+			grid-template-columns: repeat(2, span(2 of 4 narrow, $small));
+			grid-template-rows: repeat(2, row() row(3));
+			grid-gap: row() gutter(of 4 narrow, $small);
+		}
+
+		@media (max-width: em(510px)) {
+			grid-template-rows: repeat(2, row() row(2));
+		}
+	}
+	dt, dd {
+		grid-column: 1;
+		&:nth-of-type(2n) { grid-column: 2; } // right elements
+	}
+	dt {
+		// sass-lint:disable-block no-duplicate-properties
+		$font-size: rem(20px);
+		font-size: $font-size;
+		font-size: responsive-text($font-size, rem(28px), map-get($small, "max-width"), map-get($susy, "design-width"));
+		font-weight: 500;
+		grid-column-end: span 1;
+		grid-row: 1 / span 2;
+		&:nth-of-type(3), &:nth-of-type(4) {
+			grid-row-start: 3;
+		}
+		@include bp($small) {
+			font-size: responsive-text(rem(14px), rem(28px), map-get($small, "design-width"), map-get($small, "max-width"));
+		}
+	}
+	dd {
+		// sass-lint:disable-block no-duplicate-properties
+		$font-size: rem(16px);
+		font-size: $font-size;
+		font-size: responsive-text($font-size, rem(24px), map-get($small, "max-width"), map-get($susy, "design-width"));
+		grid-row: 2;
+		&:nth-of-type(3), &:nth-of-type(4) {
+			grid-row: 4;
+		}
+		@include bp($small) {
+			font-size: responsive-text(rem(12px), rem(24px), map-get($small, "design-width"), map-get($small, "max-width"));
+		}
+	}
+	// ******** END OF INFO LIST ********
+}
+
+.icon {
+	position: relative;
+	padding-left: span(1 wide of 4 narrow);
+
+	&::before {
+		background: center / contain no-repeat;
+		content: "";
+		display: inline-block;
+		float: left;
+		height: 100%;
+		margin-right: gutter(of 4 narrow);
+		min-height: 1rem;
+		width: span(1 of 4 narrow);
+
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		padding: .3em;
+		box-sizing: border-box;
+		background-origin: content-box;
+	}
+
+	+ dd {
+		padding-left: span(1 wide of 4 narrow);
+	}
+
+	&.icon_leaf::before {
+		background-image: url(inline-svg("../_includes/icons/leaf.svg"));
+	}
+	&.icon_bed::before {
+		background-image: url(inline-svg("../_includes/icons/bed.svg"));
+	}
+	&.icon_hourglass::before {
+		background-image: url(inline-svg("../_includes/icons/hourglass.svg"));
+	}
+	&.icon_unicycle::before {
+		background-image: url(inline-svg("../_includes/icons/unicycle.svg"));
+	}
+
+	@include bp($small) {
+		$icon-width: 17.5;
+		$icon-margin: 20;
+		padding-left: 0;
+		&::before {
+			position: static;
+			padding: 0;
+			float: left;
+			$font-size-in-pixels: 14;
+			width: 1em / $font-size-in-pixels * $icon-width;
+			margin-right: 1em / $font-size-in-pixels * $icon-margin;
+		}
+
+		// show the image on the left
+		+ dd {
+			$font-size-in-pixels: 12;
+			padding-left: (1em / $font-size-in-pixels * ($icon-width + $icon-margin));
+		}
+
+		// show the image on the right
+		&:nth-of-type(2n) {
+			text-align: right;
+			&::before {
+				float: right;
+				margin: 0 0 0 gutter(of 4 narrow);
+			}
+			+ dd {
+				$font-size-in-pixels: 12;
+				text-align: right;
+				padding-left: 0;
+				padding-right: (1em / $font-size-in-pixels * ($icon-width + $icon-margin));
+			}
+		}
+	}
+}

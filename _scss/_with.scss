@@ -1,0 +1,291 @@
+$icon-path: "../_includes/icons/";
+$svgo: (removeDimensions: true);
+$size: 14;
+
+%bracket {
+	&::before {
+		$current-full-width: 1480 / 100% * span(3 narrow);
+		width: 100% / $current-full-width * 29;
+	}
+	&::after {
+		$current-full-width: 1480 / 100% * span(3 narrow);
+		width: 100% / $current-full-width * 30;
+	}
+}
+%tag {
+	&::before {
+		$current-full-width: 1480 / 100% * span(3 narrow);
+		width: 100% / $current-full-width * 33;
+	}
+	&::after {
+		$current-full-width: 1480 / 100% * span(3 narrow);
+		width: 100% / $current-full-width * 61;
+	}
+}
+%as-svg {
+	font-weight: 500;
+	// center its content like the default svg preserveAspectRatio
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+@mixin as-svg($size, $current-viewbox, $used-viewbox, $font-size, $inner-svg-offset: 0 0, $text-offset: 0 0) {
+	@extend %as-svg;
+	$fit-in: if(unit($size) == "vh", "height", "width");
+	$height: if($fit-in == "height", $size, $size / nth($used-viewbox, 3) * nth($used-viewbox, 4));
+	$calc-point-size: $height / nth($used-viewbox, 4);
+
+	svg {
+		height: $height;
+		// height * aspect ratio of current / used svg
+		width: $height * nth($current-viewbox, 3) / nth($current-viewbox, 4);
+		@if nth($inner-svg-offset, 2) != 0 { margin-top: $calc-point-size * nth($inner-svg-offset, 2); }
+		@if nth($inner-svg-offset, 1) != 0 { margin-left: $calc-point-size * nth($inner-svg-offset, 1); }
+	}
+	span {
+		font-size: $calc-point-size * $font-size; // point size * font-size
+		height: $height - $calc-point-size * (nth($text-offset, 2) - $font-size); // point size * (y - font-size)
+		// point size * (y - font-size)
+		@if nth($text-offset, 2) != 0 { margin-top: $calc-point-size * (nth($text-offset, 2) - $font-size); }
+		// point size * x
+		@if nth($text-offset, 1) != 0 { margin-left: $calc-point-size * nth($text-offset, 1); }
+	}
+}
+
+.with {
+	width: auto;
+	margin: row(3) 0 row(5);
+
+	h2 {
+		margin: row() span(1 wider);
+		@include bp($small) {
+			margin: row() span(1 of narrow);
+		}
+	}
+
+	svg {
+		font-weight: 500;
+		font-size: 52px; //sass-lint:disable-line property-units
+		vertical-align: middle;
+		width: 80%;
+		height: 100%;
+	}
+	ul {
+		overflow: auto;
+	}
+	&__tool {
+		// base
+		@include base-aspect-ratio(
+			$aspect: .93, $perc: span(3 narrow) - (100% / 1480 * 60 * 2),
+			$config: (aspect: (until: $size, from: em-to-rem(map-get($small, "max-width"))))
+		);
+
+		// susy
+		box-sizing: border-box;
+		margin-right: gutter();
+		width: span(3 narrow);
+		float: left;
+
+		background: center / contain no-repeat content-box;
+		position: relative;		// positioning psuedo elements
+		list-style: none;			// reset
+		font-size: 0;					// hide readable text
+		text-align: center; // center svg
+		&:first-child {
+			margin-left: gutter();
+		}
+		&::before, &::after {
+			content: "";
+			background: center / contain no-repeat content-box;
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100%;
+		}
+		&::after {
+			left: auto;
+			right: 0;
+		}
+		abbr {
+			display: block;
+			text-decoration: none;
+		}
+		&_gulp {
+			@extend %bracket;
+			background-image: url(inline-svg($icon-path + "gulp.svg"));
+			padding-right: 100% / 1480 * 60;
+			padding-left: 100% / 1480 * 60;
+			&::before {
+				background-image: url(inline-svg($icon-path + "open-bracket.svg", "svg { fill: #{$color-red} }"));
+			}
+			&::after {
+				background-image: url(inline-svg($icon-path + "closing-bracket.svg", "svg { fill: #{$color-red} }"));
+			}
+		}
+		&_sass {
+			@extend %bracket;
+			background-image: url(inline-svg($icon-path + "sass.svg"));
+			padding-left: 100% / 1480 * 70;
+			padding-right: 100% / 1480 * 70;
+			abbr { height: 100%; }
+			&::before {
+				background-image: url(inline-svg($icon-path + "open-bracket.svg", "svg { fill: #{$color-pink} }"));
+			}
+			&::after {
+				background-image: url(inline-svg($icon-path + "closing-bracket.svg", "path { fill: #{$color-pink} }"));
+			}
+		}
+		&_html {
+			@extend %tag;
+			$padding-left: 100% / 1480 * (33 + 14);
+			$padding-right: 100% / 1480 * (61 + 14);
+			$width-in-vw: ((span(3 narrow) - $padding-left - $padding-right) / 1% * 1vw) * .8;
+			@include as-svg(
+				$size: $width-in-vw, $used-viewbox: 0 0 196 97, $current-viewbox: 0 0 35 40,
+				$font-size: 52, $text-offset: -2.17 59.9, $inner-svg-offset: 4 0
+			);
+			color: $color-orange;
+			padding-left: $padding-left;
+			padding-right: $padding-right;
+
+			span { float: left; } // fallback switcheroo
+			svg {
+				float: right; // fallback switcheroo
+				order: 1;
+			}
+			&::before {
+				background-image: url(inline-svg($icon-path + "open-tag.svg", "svg { fill: #{$color-orange} }"));
+			}
+			&::after {
+				background-image: url(inline-svg($icon-path + "closing-tag.svg", "path { fill: #{$color-orange} }"));
+			}
+		}
+		&_svg {
+			@extend %tag;
+			$padding-left: 100% / 1480 * (33 + 20);
+			$padding-right: 100% / 1480 * (61 + 20);
+			$width-in-vw: ((span(3 narrow) - $padding-left - $padding-right) / 1% * 1vw) * .8;
+			@include as-svg(
+				$size: $width-in-vw, $used-viewbox: 0 0 184 127, $current-viewbox: 0 0 131 127,
+				$font-size: 52, $text-offset: 0 79
+			);
+			color: $color-blue;
+			padding-left: $padding-left;
+			padding-right: $padding-right;
+			svg, span { float: left; }
+			&::before {
+				background-image: url(inline-svg($icon-path + "open-tag.svg", "svg { fill: #{$color-blue} }"));
+			}
+			&::after {
+				background-image: url(inline-svg($icon-path + "closing-tag.svg", "path { fill: #{$color-blue} }"));
+			}
+		}
+	}
+
+	@include bp($small) {
+		// overrides some style to return to normal behavior for the svg & html icons
+		%override-as-svg-styles {
+			display: block;
+			svg, span {
+				float: none;
+			}
+			span {
+				font-size: inherit;
+				margin: 0;
+			}
+			svg {
+				display: inline-block;
+				box-sizing: border-box;
+				width: 100%;
+				vertical-align: baseline;
+			}
+		}
+
+		$font-size: 1rem;
+		$s-bottom-offset: bottom($font-size);
+		&__tool {
+			background: none;
+			font-weight: 500;
+			height: auto; 	// reset base aspect ratio
+			padding: 0; 		// reset custom indetation of desktop
+			color: inherit; // override html and svg color
+
+			// base
+			font-size: $font-size;
+			line-height: line-height($font-size);
+			margin-bottom: $s-bottom-offset;
+
+			// susy
+			width: span(1, $small);
+			margin-right: gutter($small);
+			&:first-child {
+				margin-left: gutter($small);
+			}
+
+			// "+", plus sign
+			&::after {
+				content: "";
+				background: url(inline-svg($icon-path + "plus.svg"))
+										center / contain no-repeat content-box;
+				display: inline-block;
+				position: absolute;
+				left: - gutter(of 1 narrow, $small);
+				width: gutter(of 1 narrow, $small);
+				box-sizing: border-box;
+				padding: 0 .2rem;
+				height: 1.6rem;
+				top: auto;
+				bottom: $s-bottom-offset - .3rem;
+			}
+			&:first-child {
+				&::after {
+					content: none;
+				}
+			}
+			// end plus sign
+
+			// logo of the tool
+			&::before, & svg {
+				@include base-aspect-ratio(55 / 64, span(1, $small),
+					$config: (aspect: (until: em-to-rem(map-get($small, "max-width"))))
+				);
+			}
+			&::before {
+				content: none;
+				box-sizing: border-box;
+				display: inline-block;
+				position: static;
+				width: 100%;
+			}
+			&_gulp {
+				&::before {
+					content: "";
+					background-image: url(inline-svg($icon-path + "gulp.svg"));
+				}
+			}
+			&_sass {
+				abbr { height: auto; }
+				&::before {
+					content: "";
+					background-image: url(inline-svg($icon-path + "sass.svg"));
+					padding-top: 100% / (span(1, $small) / 100% * 320) * 19;
+					padding-bottom: 100% / (span(1, $small) / 100% * 320) * 7.6;
+				}
+			}
+			&_html {
+				@extend %override-as-svg-styles;
+				svg {
+					padding-top: 100% / (span(1, $small) / 100% * 320) * 20;
+					padding-bottom: 100% / (span(1, $small) / 100% * 320) * 4;
+				}
+			}
+			&_svg {
+				@extend %override-as-svg-styles;
+				svg {
+					padding-top: 100% / (span(1, $small) / 100% * 320) * 19;
+					padding-bottom: 100% / (span(1, $small) / 100% * 320) * 5.64;
+				}
+			}
+		}
+	}
+}

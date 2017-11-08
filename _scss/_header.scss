@@ -1,0 +1,187 @@
+@import "menu-icon";
+
+// Desktop UI
+body > header {
+	@include el-menu-icon(1rem, .3s, 0s);
+	// $config: 	_base-settings((font-size: rem(20px), add-rows-to-line-height: 0));
+	$font-size: rem(20px);
+	font-size: 			$font-size;
+	line-height: 		line-height($font-size);
+	padding-bottom:	bottom($font-size);
+	padding-top: 		top($font-size) + row();
+	text-align: right;
+	// overflow: auto;
+
+	@at-root .header_menu-button {
+		display: none;
+	}
+
+	li {
+		display: inline-block;
+		margin-right: gutter();
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	// Home icon
+	svg {
+		height: (1em / 22 * 20);
+		width: 1em;
+	}
+}
+
+// Mobile UI
+@media (max-width: 760px) {
+	$trigger: "input:checked ~ header";
+
+	body > header {
+		// TODO: fix menu items on baseline
+		color: $color-white;   // text color of MENU
+		font-size: rem(20px);
+		height: row() * 3;   	// fake height of .header_menu
+		padding: 0;          	 // reset desktop
+
+		@at-root #{$trigger} {
+			@include el-menu-icon--hover(2rem, .3s, .1s);
+		}
+
+		// BACKGROUND
+		// TODO: make sure that the background is never visible
+		&::before {
+			background: $color-red-transparent;
+			content: "";
+			display: block;
+
+			// position element at the right side of the menu button
+			height: row();
+			position: fixed;
+			right: gutter($small);
+			top: row();
+			width: 0;
+
+			z-index: 1;         // lowest element
+
+			// closing transition: width, then height
+			transition: .4s cubic-bezier(.6, 0, .7, .8) height,
+			.4s cubic-bezier(.6, 0, .7, .8) right,
+			.4s cubic-bezier(.6, 0, .7, .8) top,
+			.4s width;
+
+			@at-root #{$trigger} {
+				&::before {
+					// cover the screen
+					height: 100%;
+					right: 0;
+					top: 0;
+					width: 100%;
+
+					// closing transition: height + position, then width
+					transition: .4s height, .4s right, .4s top, .4s width cubic-bezier(.6, 0, .7, .8);
+				}
+			}
+		}
+
+		// MENU
+		// TODO: make sure that `nav` is not visible when the menu is closed
+		nav {
+			visibility: hidden;
+
+			// cover the screen
+			position: fixed;
+			width: span(4, $small);
+			height: 100%;
+			left: gutter($small);
+			top: 0;
+
+			transform: translateX(100%); // hide offscreen
+			z-index: 3; // above bg, beneath close button
+			transition: .4s transform, .3s opacity, visibility 0s .4s;
+			@at-root #{$trigger} nav {
+				visibility: visible;
+				transform: translateX(0%);
+				opacity: 1;
+				transition: .4s transform cubic-bezier(.6, 0, .7, .8), .3s opacity .1s;
+			}
+		}
+
+		// Divide elements on avaible space and center it
+		ul {
+			display: flex;
+			height: 100%;
+			flex-direction: column;
+		}
+
+		li {
+			display: flex;
+			flex-grow: 1;
+			align-items: center;
+			text-align: center;
+			margin-right: 0;    // reset of desktop menu
+		}
+
+		a {
+			width: 100%;
+		}
+	}
+
+	// MENU BUTTON
+	// TODO: cleaner overwrite of color in the menu icon
+	.header_menu {
+		$font-size: rem(14px);
+
+		&-button {
+			display: block;
+			font-size: $font-size;
+
+			// place menu button in reserved space + align to baseline grid
+			position: absolute;
+			right: gutter($small);
+			top: top($font-size);
+			line-height: line-height($font-size);
+
+			color: $color-black;
+			cursor: pointer;
+			transition: .2s color .2s, .3s box-shadow, margin-top .2s;
+
+			// TODO: create nicer outline when focused
+		}
+
+		&-icon {
+			margin-left: row();
+			color: $color-black;
+			z-index: 4;         // most top element in overlay
+		}
+
+		@at-root #{$trigger} & {
+			&-button {
+				// Make sure that only the close button occupies space
+				font-size: 0;
+
+				// show the transition of transparent <--> black
+				color: change-color($color-black, $alpha: 0);
+				transition: .2s color, 0s font-size .4s, margin-top .2s;
+				margin-top: row() * 2 - top($font-size);
+			}
+
+			&-icon {
+				color: $color-white;
+				margin-left: 0;
+			}
+
+			// closes the overlay when pressed on background
+			&::before {
+				content: "";
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 2;
+			}
+
+		}
+	}
+}
