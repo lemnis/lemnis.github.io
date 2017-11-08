@@ -111,38 +111,38 @@ $color-red-transparent: rgba($color-red, .7);
 	padding: 0;
 }
 
-head {
-	display: block;
-	position: fixed;
-	bottom: .2rem;
-	right: .2rem;
-	font-size: 3rem;
-	z-index: 2;
-	&::before {
-		content: "\2261";
-	}
-	&:hover, &:focus {
-		z-index: 1;
-		pointer-events: all;
-		~ body {
-			position: relative;
-			&::after {
-				content: "";
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				// height: 499%;
-				bottom: 0;
-				pointer-events: none;
-				background-image: susy-svg-grid(), base-debug-image();
-				@include bp($small) {
-					background: susy-svg-grid($small), base-debug-image();
-				}
-			}
-		}
-	}
-}
+// head {
+// 	display: block;
+// 	position: fixed;
+// 	bottom: .2rem;
+// 	right: .2rem;
+// 	font-size: 3rem;
+// 	z-index: 2;
+// 	&::before {
+// 		content: "\2261";
+// 	}
+// 	&:hover, &:focus {
+// 		z-index: 1;
+// 		pointer-events: all;
+// 		~ body {
+// 			position: relative;
+// 			&::after {
+// 				content: "";
+// 				position: absolute;
+// 				top: 0;
+// 				left: 0;
+// 				right: 0;
+// 				// height: 499%;
+// 				bottom: 0;
+// 				pointer-events: none;
+// 				background-image: susy-svg-grid(), base-debug-image();
+// 				@include bp($small) {
+// 					background: susy-svg-grid($small), base-debug-image();
+// 				}
+// 			}
+// 		}
+// 	}
+// }
 
 body {
 	font-family: "Segoe UI";

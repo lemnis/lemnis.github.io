@@ -83,7 +83,7 @@ gulp.task('sass', function () {
 		})))
 		.pipe(postcss([
 			pseudoElements(),
-			// cssnano(),
+			cssnano(),
 			pixrem({
 				rootValue: 16,
 				replace: false,

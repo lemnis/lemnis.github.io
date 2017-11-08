@@ -29,6 +29,7 @@
 		width: span(3 of 10 narrow);
 		margin-left: span(1 wider of 10 narrow);
 		height: auto;
+		fill: white;
 	}
 	@include bp($small) {
 		padding: row() gutter($small) row() * 3;
